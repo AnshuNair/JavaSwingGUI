@@ -1,0 +1,88 @@
+package ws4;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+
+import java.awt.FlowLayout;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class StudentInfoWriter extends JFrame {
+
+	static Student student = new Student();
+
+	static ArrayList<Student> students = new ArrayList<Student>();
+	static ArrayList<String> courses = new ArrayList<String>();
+
+	static int studentId = 0;
+	static String firstName = "";
+	static String lastName = "";
+
+	private final JLabel jmessage;
+	private final JButton writeButton;
+
+	public static int studentNum;
+
+	public StudentInfoWriter() {
+		super("Write Confirmation");
+		setLayout(new FlowLayout());
+
+		jmessage = new JLabel("Write student(s) to file? If you wish to add more students, click cancel.");
+		jmessage.setVerticalAlignment(SwingConstants.TOP);
+		add(jmessage);
+		
+		writeButton = new JButton("Write");
+		writeButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		add(writeButton);
+	}
+
+	static void createFrame() {
+		StudentForm stdCreator = new StudentForm();
+		stdCreator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		stdCreator.setSize(300, 500);
+		stdCreator.setVisible(true);
+		stdCreator.setResizable(false);
+	}
+
+	static void writeToFile() {
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("student.txt"));
+			os.writeObject(students);
+			os.flush();
+			os.close();
+			JOptionPane.showMessageDialog(null, "Wrote " + studentNum + " student(s) to file", "Write to file",
+					JOptionPane.PLAIN_MESSAGE);
+		} catch (Throwable e) {
+			System.err.println(e);
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+
+		createFrame();
+
+//		while (studentFlag) {
+//			if (studentAdded) {
+//				System.out.println("student was added");
+//				studentAdded = false;
+//				//String addChoice = JOptionPane
+//				//		.showInputDialog("Please enter y/Y if you wish to add another student. If not, press cancel.");
+//				if (addChoice.equals("y") || addChoice.equals("Y")) {
+//					studentFlag = true;
+//					createFrame();
+//				} else if (addChoice == null || !(addChoice.equals("y") || addChoice.equals("Y")))
+//					studentFlag = false;
+//			}
+//		}
+//
+//		JOptionPane.showMessageDialog(null,
+//				"Added " + studentNum + " student(s). Press OK to write student object(s) to file 'student.txt'",
+//				"Student Creation Complete", JOptionPane.PLAIN_MESSAGE);
+	}
+}

@@ -1,0 +1,58 @@
+package ws4;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Student implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private int stdID;
+	private String firstName;
+	private String lastName;
+	private ArrayList<String> courses;
+	
+	public Student(int stdID, String firstName, String lastName) {
+		super();
+		this.stdID = stdID;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		
+		courses = new ArrayList<String>();
+	}
+
+	public int getStdID() {
+		return stdID;
+	}
+
+	public void setStdID(int stdID) {
+		if (stdID > 0)
+			this.stdID = stdID;
+		else
+			throw new IllegalArgumentException("Invalid student ID");
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public ArrayList<String> getCourses() {
+		return courses;
+	}
+
+	public void addCourse(String course) {
+		courses.add(course);
+	}
+
+}

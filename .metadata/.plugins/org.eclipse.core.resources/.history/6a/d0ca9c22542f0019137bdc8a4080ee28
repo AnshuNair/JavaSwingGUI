@@ -1,0 +1,18 @@
+package ws4;
+
+import java.io.*;
+
+public class StudentInfoReader {
+	
+	Student student = null;
+	
+	try {
+		FileInputStream fis = new FileInputStream("student.txt");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		student = (Student)ois.readObject();
+				fis.close();
+	}catch(Throwable e) {
+		System.err.println(e);
+	}
+	
+}

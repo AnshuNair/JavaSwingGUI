@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;ws4.StdInfoReader&apos; to &apos;StudentInfoReader&apos;&#x0D;&#x0A;- Original project: &apos;WS4&amp;5&apos;&#x0D;&#x0A;- Original element: &apos;ws4.StdInfoReader&apos;&#x0D;&#x0A;- Renamed element: &apos;ws4.StudentInfoReader&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;StdInfoReader&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;ws4{StdInfoReader.java[StdInfoReader" matchStrategy="1" name="StudentInfoReader" qualified="false" references="true" similarDeclarations="false" stamp="1550037259890" textual="false" version="1.0"/>
+</session>

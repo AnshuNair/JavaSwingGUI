@@ -1,0 +1,228 @@
+package ws4;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
+public class StudentInfoWriter extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
+	
+	private final JTextField tfFirstName;
+	private final JTextField tfLastName;
+	private final JTextField tfStudentId;
+	//private final JTextField tfCourse;
+
+	private final JLabel lFirstName;
+	private final JLabel lLastName;
+	private final JLabel lStudentId;
+	private final JLabel lCourse;
+	
+	private final JButton writeButton;
+	private final JTextArea taCourse;
+
+	static String sStudentId = "";
+	static int studentId = 0;
+	static String firstName = "";
+	static String lastName = "";
+	static String course = "";
+
+	static ArrayList<Student> students = new ArrayList<Student>();
+
+	public StudentInfoWriter() {
+		super("Student Creator");
+		setLayout(new FlowLayout());
+
+		lStudentId = new JLabel("Student ID: ");
+		//lStudentId.setHorizontalAlignment(SwingConstants.LEFT);
+		add(lStudentId);
+		tfStudentId = new JTextField(15);
+		tfStudentId.setHorizontalAlignment(SwingConstants.LEFT);
+		add(tfStudentId);
+		
+		JPanel p = new JPanel();
+		p.setBorder(new EmptyBorder(10, 10, 10, 10));
+		add(p);
+
+		lFirstName = new JLabel("First Name: ");
+		//lFirstName.setHorizontalAlignment(SwingConstants.LEFT);
+		add(lFirstName);
+		tfFirstName = new JTextField(15);
+		tfFirstName.setHorizontalAlignment(SwingConstants.LEFT);
+		add(tfFirstName);
+		
+		JPanel q = new JPanel();
+		q.setBorder(new EmptyBorder(10, 10, 10, 10));
+		add(q);
+
+		lLastName = new JLabel("Last Name: ");
+		//lLastName.setHorizontalAlignment(SwingConstants.LEFT);
+		add(lLastName);
+		tfLastName = new JTextField(15);
+		tfLastName.setHorizontalAlignment(SwingConstants.LEFT);
+		add(tfLastName);
+		
+		JPanel r = new JPanel();
+		r.setBorder(new EmptyBorder(10, 10, 10, 20));
+		add(r);
+
+		lCourse = new JLabel("Course Names: ");
+		//lCourse.setHorizontalAlignment(SwingConstants.LEFT);
+		add(lCourse);
+		//tfCourse = new JTextField(15);
+		taCourse = new JTextArea(null, 10, 15);
+		//taCourse.setHorizontalAlignment(SwingConstants.LEFT);
+		add(taCourse);
+		add(new JScrollPane(taCourse));
+		
+		writeButton = new JButton("Save Student");
+		writeButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		add(writeButton);
+		
+		ButtonHandler handler = new ButtonHandler();
+		writeButton.addActionListener(handler);
+		tfStudentId.addActionListener(handler);
+		tfFirstName.addActionListener(handler);
+		tfLastName.addActionListener(handler);
+		//tfCourse.addActionListener(handler);
+	}
+
+	private class ButtonHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			if (event.getSource() == tfStudentId) {
+				try {
+					sStudentId = event.getActionCommand();
+					if (sStudentId == null) {
+						JOptionPane.showMessageDialog(null, "Student must have an ID.", "User Aborted",
+								JOptionPane.PLAIN_MESSAGE);
+						throw new IllegalArgumentException();
+					}
+					studentId = Integer.parseInt(sStudentId);
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+			}
+
+			else if (event.getSource() == tfFirstName) {
+				try {
+					firstName = event.getActionCommand();
+					if (firstName == null) {
+						JOptionPane.showMessageDialog(null, "Student must have a first name.", "User Aborted",
+								JOptionPane.PLAIN_MESSAGE);
+						throw new IllegalArgumentException();
+					}
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+			}
+
+			else if (event.getSource() == tfLastName) {
+				try {
+					lastName = event.getActionCommand();
+					if (lastName == null) {
+						JOptionPane.showMessageDialog(null, "Student must have a last name.", "User Aborted",
+								JOptionPane.PLAIN_MESSAGE);
+						throw new IllegalArgumentException();
+					}
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+			}
+
+//			else if (event.getSource() == taCourse)
+//				try {
+//					course = event.getActionCommand();
+//					if (course == null) {
+//						JOptionPane.showMessageDialog(null, "Student must be enrolled in at least one course.",
+//								"User Aborted", JOptionPane.PLAIN_MESSAGE);
+//						throw new IllegalArgumentException();
+//					}
+//				} catch (Exception e) {
+//					System.err.println(e);
+//				}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		StudentInfoWriter textFieldFrame = new StudentInfoWriter();
+		textFieldFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		textFieldFrame.setSize(300, 500);
+		textFieldFrame.setVisible(true);
+		textFieldFrame.setResizable(false);
+
+		boolean studentFlag = true;
+		boolean courseFlag = true;
+		int courses = 0;
+		int studentNum = 0;
+
+		while (studentFlag) {
+			Student student = new Student();
+			student.setStdID(studentId);
+			student.setFirstName(firstName);
+			student.setLastName(lastName);
+
+			while (courseFlag) {
+				course = JOptionPane
+						.showInputDialog("Please enter a course name. Press cancel when finished adding courses.");
+				if (course != null) {
+					courses++;
+					student.addCourse(course);
+					JOptionPane.showMessageDialog(null, course + " was added.", "Add Successful",
+							JOptionPane.PLAIN_MESSAGE);
+				} else {
+					if (courses == 0) {
+						JOptionPane.showMessageDialog(null, "Student must be enrolled in at least one course.",
+								"User Aborted", JOptionPane.PLAIN_MESSAGE);
+						return;
+					}
+					courseFlag = false;
+					JOptionPane.showMessageDialog(null, "Done adding courses", "Add Complete",
+							JOptionPane.PLAIN_MESSAGE);
+				}
+			}
+
+			students.add(student);
+			studentNum++;
+			String addChoice = JOptionPane
+					.showInputDialog("Please enter y/Y if you wish to add another student. If not, press cancel.");
+			if (addChoice == null || !(addChoice.equals("y") || addChoice.equals("Y")))
+				studentFlag = false;
+			else if (addChoice.equals("y") || addChoice.equals("Y")) {
+				course = "";
+				courseFlag = true;
+			}
+		}
+
+		JOptionPane.showMessageDialog(null,
+				"Added " + studentNum + " student(s). Press OK to write student object(s) to file 'student.txt'",
+				"Student Creation Complete", JOptionPane.PLAIN_MESSAGE);
+
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("student.txt"));
+			os.writeObject(students);
+			os.flush();
+			os.close();
+			JOptionPane.showMessageDialog(null, "Success!", "Write to file", JOptionPane.PLAIN_MESSAGE);
+		} catch (Throwable e) {
+			System.err.println(e);
+			e.printStackTrace();
+		}
+	}
+}

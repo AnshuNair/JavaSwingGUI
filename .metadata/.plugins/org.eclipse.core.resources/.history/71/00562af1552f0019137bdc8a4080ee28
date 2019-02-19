@@ -1,0 +1,30 @@
+package ws4;
+
+import java.io.*;
+import java.util.ArrayList;
+
+public class StudentInfoReader {
+
+	public static void main(String[] args) {
+
+		Student student = null;
+
+		try {
+			FileInputStream fis = new FileInputStream("student.txt");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			student = (Student) ois.readObject();
+			fis.close();
+		} catch (Throwable e) {
+			System.err.println(e);
+		}
+		
+		System.out.println("Student's ID is: " + student.getStdID());
+		System.out.println("Student's Name is: " + student.getFirstName() + " " + student.getLastName());
+		System.out.println("Enrolled courses are:\n");
+		ArrayList<String> courses = student.getCourses();
+		
+		for(int i = 0;i<courses.size();i++) {
+			System.out.println(courses.get(i));
+		}
+	}
+}

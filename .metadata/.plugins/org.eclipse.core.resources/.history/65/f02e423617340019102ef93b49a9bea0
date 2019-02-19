@@ -1,0 +1,96 @@
+package ws4;
+
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+
+import ws4.StudentForm.ButtonHandler;
+
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class StudentInfoWriter extends JFrame {
+
+	static ArrayList<Student> students = new ArrayList<Student>();
+	static ArrayList<String> courses = new ArrayList<String>();
+
+	static int studentId = 0;
+	static String firstName = "";
+	static String lastName = "";
+
+	private final JLabel jmessage;
+	private final JButton writeButton;
+	private final JButton cancelButton;
+
+	public static int studentNum;
+
+	public StudentInfoWriter() {
+		super("Write Confirmation");
+		setLayout(new FlowLayout());
+
+		jmessage = new JLabel("Write student(s) to file? If you wish to add more students, click 'Cancel'.");
+		jmessage.setVerticalAlignment(SwingConstants.TOP);
+		add(jmessage);
+
+		writeButton = new JButton("Write");
+		writeButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		writeButton.setHorizontalAlignment(SwingConstants.LEFT);
+		add(writeButton);
+
+		cancelButton = new JButton("Cancel");
+		cancelButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		cancelButton.setHorizontalAlignment(SwingConstants.RIGHT);
+		add(cancelButton);
+
+		ButtonHandler writeHandler = new ButtonHandler();
+		writeButton.addActionListener(writeHandler);
+
+		cancelButton.addActionListener((new ActionListener() { // anonymous inner class
+			// handle button event
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				dispose();
+			}
+		}));
+	}
+
+	public class ButtonHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			writeToFile();
+		}
+	}
+
+	static void createFrame() {
+		StudentForm stdCreator = new StudentForm();
+		stdCreator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		stdCreator.setSize(300, 500);
+		stdCreator.setVisible(true);
+		stdCreator.setResizable(false);
+	}
+
+	static void writeToFile() {
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("student.txt"));
+			os.writeObject(students);
+			os.flush();
+			os.close();
+			JOptionPane.showMessageDialog(null, "Wrote " + studentNum + " student(s) to file", "Write to file",
+					JOptionPane.PLAIN_MESSAGE);
+		} catch (Throwable e) {
+			System.err.println(e);
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		createFrame();
+	}
+}
